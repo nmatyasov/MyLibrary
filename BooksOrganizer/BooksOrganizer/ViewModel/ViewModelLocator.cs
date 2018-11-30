@@ -11,8 +11,8 @@
 
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
 using BooksOrganizer.Model;
+using CommonServiceLocator;
 
 namespace BooksOrganizer.ViewModel
 {
