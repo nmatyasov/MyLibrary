@@ -13,5 +13,5 @@ namespace BooksOrganizer.Model
 
         public int BookId { get; set; }
         public Book Book { get; set; }
-    
+    }
 }
