@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BooksOrganizer.Model
 {
    public class Author
     {
-        class Authors
-        {
-            public int Id { get; set; }
+
+            [Key]
+            [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public int AuthorId { get; set; }
+            [Required]
+            [StringLength(255)]
             public string Name { get; set; }
 
-            List<Book> Book { get; set; }
-        }
-
+        public virtual ICollection<BookAuthor> BookAuthors { get; set; }
 
     }
 }

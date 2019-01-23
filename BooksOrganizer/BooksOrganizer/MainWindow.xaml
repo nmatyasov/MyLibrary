@@ -4,23 +4,135 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d ignore"
         Height="600"
         Width="1080"
         Title="MVVM Light Application"
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize" 
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     
     <Window.Resources>
-        <ResourceDictionary>
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="70"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="70"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <ResourceDictionary x:Key="Skin">
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+
+        <DataTemplate  x:Key="BookListDataTemplate">
+            <StackPanel HorizontalAlignment="Center">
+                <Image Width="150" Source="{Binding CoverImage}" />
+                <TextBlock FontSize="16" Text="{Binding Title}" HorizontalAlignment="Center" />
+                <TextBlock FontSize="10" Text="{Binding Author}" HorizontalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+
     </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid Background="#FFDEDEDE">
+        <Grid x:Name="GridMain" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="540" Width="1010"/>
+        <Grid Height="60" VerticalAlignment="Top" Background="#FF5C99D6">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="1" ShadowDepth="1" Color="#FFACACAC"/>
+            </Grid.Effect>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0">
+                <Button x:Name="ButtonClose" Foreground="White" Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0"  
+                     Command="{Binding ShutdownCommand}"
+                    ToolTipService.ToolTip="Click to shutdown" >
+                    <materialDesign:PackIcon Kind="Power"/>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Books Organizer" VerticalAlignment="Center" FontSize="20" Foreground="White" FontFamily="Champagne &amp; Limousines" Margin="20 0"/>
+                <TextBox materialDesign:HintAssist.Hint="SEARCH" Foreground="White" Width="600" FontSize="20"/>
+                <materialDesign:PackIcon Kind="Magnify" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
+            </StackPanel>
+        </Grid>
 
-    <Grid x:Name="LayoutRoot">
+        <Grid x:Name="GridMenu" Width="70" HorizontalAlignment="Left" Background="#FF5C99D6">
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="2" ShadowDepth="1" Color="#FFAEAEAE"/>
+        </Grid.Effect>
+        <StackPanel>
+            <Grid Height="150" Background="White" RenderTransformOrigin="0.5,0.5">
+                <Grid.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Grid.RenderTransform>
+                <Button x:Name="ButtonOpenMenu" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" Click="ButtonOpenMenu_Click">
+                    <materialDesign:PackIcon Kind="Menu" Width="25" Height="25"/>
+                </Button>
+                <Button x:Name="ButtonCloseMenu" Visibility="Collapsed" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" Click="ButtonCloseMenu_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25"/>
+                </Button>
+                <Image Height="80" VerticalAlignment="Bottom"/>
+            </Grid>
+            <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ListViewMenu_SelectionChanged">
+                <ListViewItem x:Name="ItemHome" Height="60">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Home" Height="25" Width="25" Margin="10"/>
+                        <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10"/>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem x:Name="ItemCreate" Height="60">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Pencil" Height="25" Width="25" Margin="10"/>
+                        <TextBlock Text="Create" VerticalAlignment="Center" Margin="20 10"/>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Height="60">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Ticket" Height="25" Width="25" Margin="10"/>
+                        <TextBlock Text="Tickets" VerticalAlignment="Center"  Margin="20 10"/>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Height="60">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="SettingsApplications" Height="25" Width="25" Margin="10"/>
+                        <TextBlock Text="Messages" VerticalAlignment="Center"  Margin="20 10"/>
+                    </StackPanel>
+                </ListViewItem>
+            </ListView>
+        </StackPanel>
+    </Grid>
+        <Grid Margin="250 55 0 0">
+            <Grid x:Name="GridPrincipal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+        <Grid x:Name="LayoutRoot">
 
-        <TextBlock FontSize="36"
+            <Grid Margin="70  55 0 0">
+                <ListView ItemsSource= "{Binding Items}"
+                  ItemTemplate="{StaticResource BookListDataTemplate}">
+                </ListView>
+            </Grid>
+      
+     
+            <TextBlock FontSize="36"
                    FontWeight="Bold"
                    Foreground="Purple"
                    Text="{Binding WelcomeTitle}"
@@ -28,5 +140,8 @@
                    HorizontalAlignment="Center"
                    TextWrapping="Wrap" />
 
+        </Grid>
+
     </Grid>
+
 </Window>

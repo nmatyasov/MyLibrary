@@ -1,9 +1,93 @@
+J. Benton Jones, Jr.
+Paperback: 223 pages
+Publisher: CRC Press; 1 edition (February 15, 2014)
+Language: English
+ISBN-10: 1439876681
+ISBN-13: 978-1439876688
+Crafts, Hobbies & Home
+With the continued implementation of new equipment and new concepts and methods, such as hydroponics and soilless practices, crop growth has improved and become more efficient. Focusing on the basic principles and practical growth requirements, the Complete Guide for Growing Plants Hydroponically offers valuable information for the commercial grower, the researcher, the hobbyist, and the student interested in hydroponics. It provides details on methods of growing that are applicable to a range of environmental growing systems.
+
 https://www.amazon.com/Complete-Guide-Growing-Plants-Hydroponically/dp/1439876681
 
+Dr. Norman Matloff
+Series: Chapman & Hall/CRC The R Series (Book 28)
+Hardcover: 328 pages
+Publisher: Chapman and Hall/CRC; 1 edition (June 4, 2015)
+Language: English
+ISBN-10: 1466587016
+ISBN-13: 978-1466587014
+Parallel Computing for Data Science: With Examples in R, C++ and CUDA is one of the first parallel computing books to concentrate exclusively on parallel data structures, algorithms, software tools, and applications in data science. It includes examples not only from the classic "n observations, p variables" matrix format but also from time series, network graph models, and numerous other structures common in data science. The examples illustrate the range of issues encountered in parallel programming.
+Science & Math
 https://www.amazon.com/Parallel-Computing-Data-Science-Examples/dp/1466587016
 
+James Kinnear (Author), Stephen Sewell (Author), Andrey Aksenov (Illustrator)
+Hardcover: 192 pages
+Publisher: Osprey Publishing (November 20, 2018)
+Language: English
+ISBN-10: 1472833309
+ISBN-13: 978-1472833303
+The menacing silhouette of the T-54 tank prowling down streets of Eastern European capitals or roaring across fields in massive exercises remains one of the most enduring images of Soviet power in the early years of the Cold War. Its sleek and unmistakable shape was a warning to any nation that wanted to stand against the USSR.
+History
 https://www.amazon.com/Soviet-T-54-Main-Battle-Tank/dp/1472833309
 
+Peter J. Olver  , Cheri Shakiban 
+Hardcover: 736 pages
+Publisher: Pearson; 1 edition (January 20, 2005)
+Language: English
+ISBN-10: 0131473824
+ISBN-13: 978-0131473829
+This book describes basic methods and algorithms used in modern, real problems likely to be encountered by engineers and scientists - and fosters an understanding of why mathematical techniques work and how they can be derived from first principles. Assumes no previous exposure to linear algebra. Presents applications hand in hand with theory, leading readers through the reasoning that leads to the important results. Provides theorems and proofs where needed. Features abundant exercises after almost every subsection, in a wide range of difficulty. A thorough reference for engineers and scientists.
+Science & Math
 https://www.amazon.com/Applied-Linear-Algebra-Peter-Olver/dp/0131473824
 
+Elizabeth Letcavage , Alan Wycheck , William Hollis 
+File Size: 170202 KB
+Print Length: 195 pages
+Publisher: Stackpole Books; 1st edition (February 10, 2011)
+Publication Date: February 11, 2016
+Sold by: Amazon Digital Services LLC
+Language: English
+ASIN: B00AVZSPYM
+Crafts, Hobbies & Home
+Step-by-step instructions and photos illustrate basic leathercrafting techniques: choosing leather, stamping and decorating, stitching and lacing, and finishing.
 https://www.amazon.com/Basic-Leathercrafting-Skills-Started-Basics-ebook/dp/B00AVZSPYM
+
+
+Genres
+Arts & Photography
+Audible Audiobooks
+Biographies & Memoirs
+Books on CD
+Business & Money
+Calendars
+Children's Books
+Christian Books & Bibles
+Comics & Graphic Novels
+Computers & Technology
+Cookbooks, Food & Wine
+Crafts, Hobbies & Home
+Deals in Books
+Education & Teaching
+Engineering & Transportation
+Health, Fitness & Dieting
+History
+Humor & Entertainment
+Law
+Lesbian, Gay, Bisexual & Transgender Books
+Libros en espanol
+Literature & Fiction
+Medical Books
+Mystery, Thriller & Suspense
+Parenting & Relationships
+Politics & Social Sciences
+Reference
+Religion & Spirituality
+Romance
+Science & Math
+Science Fiction & Fantasy
+Self-Help
+Sports & Outdoors
+Teens
+Test Preparation
+Textbooks
+Travel

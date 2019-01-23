@@ -1,5 +1,11 @@
 ﻿using GalaSoft.MvvmLight;
 using BooksOrganizer.Model;
+using System.Data.Common;
+using System.IO;
+using System;
+using System.Data.SQLite;
+using GalaSoft.MvvmLight.Command;
+using BooksOrganizer.Helpers;
 
 namespace BooksOrganizer.ViewModel
 {
@@ -36,6 +42,8 @@ namespace BooksOrganizer.ViewModel
             }
         }
 
+        public RelayCommand ShutdownCommand { get; private set; }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -53,6 +61,26 @@ namespace BooksOrganizer.ViewModel
 
                     WelcomeTitle = item.Title;
                 });
+
+            if (IsInDesignModeStatic)
+            {
+                DbConnection connection = GetConnection("testDB");
+            }
+            else
+            {
+                 ShutdownCommand = new RelayCommand(ShutdownService.RequestShutdown);
+            }
+        }
+
+
+
+
+
+        private DbConnection GetConnection(string fileName)
+        {
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName + ".db3");
+            DbConnection connection = new SQLiteConnection(string.Format("Data Source={0};Version=3;", filePath));
+            return connection;
         }
 
         ////public override void Cleanup()

@@ -1,22 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
-
+﻿using BooksOrganizer.Model;
+using System;
+using System.Data.Entity;
+using System.Data.SQLite;
 
 namespace BooksOrganizer.Model
 {
-  
 
     public class DataContext : DbContext
     {
-        public DbSet<Book> Book { get; set; }
-        public DbSet<ISBN> Isbn { get; set; }
 
-        public DbSet<Author> Author { get; set; }
+        public DataContext() : base(new SQLiteConnection()
+   {
+            ConnectionString =
+                new SQLiteConnectionStringBuilder() { DataSource = @".\Database\books.db"  }
+                .ConnectionString
+                }, true)
+            {
+            }
 
-        public DbSet<Publisher> Publisher { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
-        {
-            optionBuilder.UseSqlite("FileName = Books.db");
-        }
+            public DbSet<Book> Books { get; set; }
+            public DbSet<Genre> Genries { get; set; }
+            public DbSet<Author> Authors { get; set; }
+            public DbSet<Publisher> Publishers { get; set; }
+            public DbSet<ISBN> ISBNs { get; set; }
+            public DbSet<BookGenre> BookGenries { get; set; }
+            public DbSet<BookAuthor> BookAuthors { get; set; }
+            public DbSet<BookPublishier> BookPublishiers { get; set; }
+            public DbSet<BookISBN> BookISBNs { get; set; }
     }
+
+
+
+
 }
