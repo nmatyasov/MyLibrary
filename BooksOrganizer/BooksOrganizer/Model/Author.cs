@@ -14,7 +14,7 @@ namespace BooksOrganizer.Model
             [StringLength(255)]
             public string Name { get; set; }
 
-        public virtual ICollection<BookAuthor> BookAuthors { get; set; }
+            public virtual ICollection<BookAuthor> BookAuthors { get; set; }
 
     }
 }

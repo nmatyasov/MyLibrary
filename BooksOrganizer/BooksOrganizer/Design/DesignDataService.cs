@@ -1,16 +1,21 @@
 ﻿using System;
 using BooksOrganizer.Model;
+using System.Collections.ObjectModel;
 
 namespace BooksOrganizer.Design
 {
     public class DesignDataService : IDataService
     {
-        public void GetData(Action<DataItem, Exception> callback)
-        {
-            // Use this to create design time data
 
-            var item = new DataItem("Welcome to MVVM Light [design]");
-            callback(item, null);
+
+        public void GetData(Action<ObservableCollection<Book>, Exception> callback)
+        { 
+            throw new NotImplementedException();
+            //ObservableCollection<Book> _books = new ObservableCollection<Book>();
+
+            //callback(_books, null);
         }
+
+
     }
 }

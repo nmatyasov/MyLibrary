@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using WpfApplication1.Converters;
+using BooksOrganizer.Converters;
 
 namespace BooksOrganizer.Database
 {
@@ -11,7 +11,7 @@ namespace BooksOrganizer.Database
     {
         private static BitmapImage LoadImage(string filename)
         {
-            return new BitmapImage(new Uri("pack://application:,,,/Images/" + filename));
+            return new BitmapImage(new Uri("pack://application:,,,/Resources/" + filename));
         }
         public static void Run()
         {

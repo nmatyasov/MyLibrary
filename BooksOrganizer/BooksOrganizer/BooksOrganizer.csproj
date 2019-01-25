@@ -216,7 +216,6 @@
     <Compile Include="Model\ISBN.cs" />
     <Compile Include="Model\Publisher.cs" />
     <Compile Include="Resources\Seeds.cs" />
-    <Compile Include="Tests\CreateDB.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">

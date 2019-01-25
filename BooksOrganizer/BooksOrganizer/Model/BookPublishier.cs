@@ -1,9 +1,9 @@
-﻿using BooksOrganizer.Model;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BooksOrganizer.Model
 {
+    [Table("BookPublishiers")]
     public class BookPublishier
     {
         [Key, Column(Order = 1)]

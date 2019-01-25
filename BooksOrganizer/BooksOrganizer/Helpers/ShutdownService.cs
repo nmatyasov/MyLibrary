@@ -38,4 +38,14 @@ namespace BooksOrganizer.Helpers
             }
         }
     }
+
+    public static class DragMoveService
+    {
+        public static void RequestDragMove()
+        {
+            Application.Current.MainWindow.DragMove();
+        }
+    }
+
+
 }
