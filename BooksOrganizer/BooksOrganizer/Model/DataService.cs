@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BooksOrganizer.Database;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace BooksOrganizer.Model
 {
@@ -15,6 +17,16 @@ namespace BooksOrganizer.Model
                 foreach (var item in db.Books)
                 {
                     _books.Add(item);
+                }
+
+                if (!db.Books.Any())
+                {
+                    Seeds.Run();
+
+                    foreach (var item in db.Books)
+                    {
+                        _books.Add(item);
+                    }
                 }
 
             }

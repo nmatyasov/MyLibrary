@@ -26,6 +26,7 @@ namespace BooksOrganizer.ViewModel
         private readonly IDataService _dataService;
         private CollectionViewSource filtredCollection;
 
+
         #region MVVMLight property
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace BooksOrganizer.ViewModel
         /// </summary>
         public const string WindowStatePropertyName = "WindowState";
 
-        private WindowState _windowState ;
+        private WindowState _windowState = WindowState.Normal;
 
         /// <summary>
         /// Sets and gets the WindowState property.
@@ -230,7 +231,7 @@ namespace BooksOrganizer.ViewModel
         /// </summary>
         public const string IconKindPropertyName = "IconKind";
 
-        private PackIconKind _iconKind;
+        private PackIconKind _iconKind = PackIconKind.WindowMaximize;
 
         /// <summary>
         /// Sets and gets the IconKind property.
@@ -250,6 +251,71 @@ namespace BooksOrganizer.ViewModel
         }
 
 
+        /// <summary>
+        /// The <see cref="OpenMenuVisible" /> property's name.
+        /// </summary>
+        public const string OpenMenuVisiblePropertyName = "OpenMenuVisible";
+
+        private Visibility _openMenuVisible = Visibility.Visible;
+
+        /// <summary>
+        /// Sets and gets the OpenMenuVisible property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property's value is broadcasted by the MessengerInstance when it changes.
+        /// </summary>
+        public Visibility OpenMenuVisible
+        {
+            get
+            {
+                return _openMenuVisible;
+            }
+
+            set
+            {
+                if (_openMenuVisible == value)
+                {
+                    return;
+                }
+
+                var oldValue = _openMenuVisible;
+                _openMenuVisible = value;
+                RaisePropertyChanged(() => OpenMenuVisible, oldValue, value, true);
+            }
+        }
+
+
+        /// <summary>
+        /// The <see cref="CloseMenuVisible" /> property's name.
+        /// </summary>
+        public const string CloseMenuVisiblePropertyName = "CloseMenuVisible";
+
+        private Visibility _closeMenuVisible = Visibility.Collapsed;
+
+        /// <summary>
+        /// Sets and gets the CloseMenuVisible property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property's value is broadcasted by the MessengerInstance when it changes.
+        /// </summary>
+        public Visibility CloseMenuVisible
+        {
+            get
+            {
+                return _closeMenuVisible;
+            }
+
+            set
+            {
+                if (_closeMenuVisible == value)
+                {
+                    return;
+                }
+
+                var oldValue = _closeMenuVisible;
+                _closeMenuVisible = value;
+                RaisePropertyChanged(() => CloseMenuVisible, oldValue, value, true);
+            }
+        }
+
         #endregion
 
 
@@ -257,7 +323,8 @@ namespace BooksOrganizer.ViewModel
         public RelayCommand ShutdownCommand { get; private set; }
         public RelayCommand MinimazeCommand { get; private set; }
         public RelayCommand ResizeCommand { get; private set; }
-        
+        public RelayCommand OpenMenuCommand { get; private set; }
+        public RelayCommand CloseMenuCommand { get; private set; }
         #endregion
 
 
@@ -281,26 +348,34 @@ namespace BooksOrganizer.ViewModel
                 });
 
 
-            if (IsInDesignModeStatic)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-   
-            }
+            if (IsInDesignMode)  
+            {  
+                // Code runs in Blend --> create design time data.  
+            }  
+         
 
             ShutdownCommand = new RelayCommand(ShutdownService.RequestShutdown);
             MinimazeCommand = new RelayCommand(onMinimazeCommand);
             ResizeCommand = new RelayCommand(onResizeCommand);
-           
+            OpenMenuCommand = new RelayCommand(onOpenMenuCommand);
+            CloseMenuCommand = new RelayCommand(onCloseMenuCommand);
 
             filtredCollection = new CollectionViewSource();
             filtredCollection.Source = BookList;
             filtredCollection.Filter += filterCollection_Filter;
-            WindowState =  WindowState.Normal;
-            IconKind = PackIconKind.WindowMaximize;
-     
+   
+        }
+
+        private void onCloseMenuCommand()
+        {
+            CloseMenuVisible = Visibility.Collapsed;
+            OpenMenuVisible = Visibility.Visible;
+        }
+
+        private void onOpenMenuCommand()
+        {
+            CloseMenuVisible = Visibility.Visible;
+            OpenMenuVisible = Visibility.Collapsed;
         }
 
         private RelayCommand<MouseButtonEventArgs> onMouseDownCommand;

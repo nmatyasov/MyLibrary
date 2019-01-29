@@ -19,9 +19,19 @@
         WindowState="{Binding WindowState, Mode=TwoWay}">
 
     <Window.Resources>
-        <databinding:ByteArrayToBitmapImageConverter x:Key="ByteArrayToBitmapImageConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Indigo.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <databinding:ByteArrayToBitmapImageConverter x:Key="ByteArrayToBitmapImageConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
-        <Storyboard x:Key="OpenMenu">
+
+            <Storyboard x:Key="OpenMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
                 <EasingDoubleKeyFrame KeyTime="0" Value="70"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200"/>
@@ -34,13 +44,7 @@
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
-        <ResourceDictionary x:Key="Skin">
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Skins/MainSkin.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-
-        <Style TargetType="ListBox">
+     <Style TargetType="ListBox">
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
@@ -49,7 +53,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+          
         <DataTemplate x:Key="MyImagesItemTemplate">
             <Grid Width="250" Height="350">
                 <Grid.RowDefinitions>
@@ -64,9 +68,24 @@
                 <Label Grid.Row="1" Content="{Binding Name}" HorizontalAlignment="Center" />
                 <Label Grid.Row="2" Content="{Binding Author}" HorizontalAlignment="Center" />
             </Grid>
-        </DataTemplate>
+        </DataTemplate>  
+            
+        </ResourceDictionary>
     </Window.Resources>
-    <Grid Background="#FFDEDEDE">
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>
+    </Window.Triggers>
+
+
+
+
+    <Grid Background="#FFDEDEDE" >
 
         <Grid Height="60" VerticalAlignment="Top" Background="#FF5C99D6">
             <i:Interaction.Triggers>
@@ -84,9 +103,24 @@
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBox materialDesign:HintAssist.Hint="SEARCH"  Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"  Width="600" FontSize="18" Background="White" FontFamily="Arial"/>
-                <materialDesign:PackIcon Kind="Magnify" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
-            </StackPanel>
+                  <materialDesign:PackIcon Kind="Book" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
+
+                <TextBox x:Name="SearchField"  materialDesign:HintAssist.Hint="SEARCH"  Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Foreground="White"  Width="600" FontSize="18" FontFamily="Arial"/>
+                    <Button x:Name="ClearSearchField"  HorizontalAlignment="Right" VerticalAlignment="Top" 
+                             Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" >
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" >
+                                <Setter Property="IsEnabled" Value="True" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchField}" Value="">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <materialDesign:PackIcon Kind="Magnify" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
+                    </Button>            
+              </StackPanel>
             <Button  Grid.Column="1" x:Name="ButtonMin" Foreground="White" Width="40" Height="40" Padding="3" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding MinimazeCommand}"  >
                 <materialDesign:PackIcon Kind="WindowMinimize" Height="25" Width="25"   />
             </Button>
@@ -96,19 +130,17 @@
             <Button  Grid.Column="3" x:Name="ButtonClose" Foreground="White" Width="40" Height="40" Padding="3" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding ShutdownCommand}"  >
                 <materialDesign:PackIcon Kind="WindowClose" Height="25" Width="25"  />
             </Button>
-
-
         </Grid>
         <Grid x:Name="GridMain" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="70,60,0,0">
 
-            <ListBox x:Name="TvBox" ItemTemplate="{StaticResource MyImagesItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding SourceCollection}" Grid.ColumnSpan="3"/>
-        <!--</Grid>
+            <ListBox x:Name="TvBox" ItemTemplate="{StaticResource MyImagesItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding SourceCollection}"/>
+        </Grid>
         <Grid x:Name="GridMenu" Width="70" HorizontalAlignment="Left" Background="#FF31577E">
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="2" ShadowDepth="1" Color="#FFAEAEAE"/>
             </Grid.Effect>
             <StackPanel>
-                <Grid Height="150" Background="White" RenderTransformOrigin="0.5,0.5">
+                <Grid Height="60" Background="White" RenderTransformOrigin="0.5,0.5">
                     <Grid.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -117,16 +149,20 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </Grid.RenderTransform>
-                    <Button x:Name="ButtonOpenMenu" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" Click="ButtonOpenMenu_Click">
+                    <Button x:Name="ButtonOpenMenu" Height="60" Width="60" Margin="5" 
+                            HorizontalAlignment="Right" VerticalAlignment="Top"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" 
+                            Command="{Binding OpenMenuCommand}"
+                            Visibility = "{Binding OpenMenuVisible , Mode=TwoWay}">
                         <materialDesign:PackIcon Kind="Menu" Width="25" Height="25"/>
                     </Button>
-                    <Button x:Name="ButtonCloseMenu" Visibility="Collapsed" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" Click="ButtonCloseMenu_Click">
+                    <Button x:Name="ButtonCloseMenu"  Height="60" Width="60" Margin="5" 
+                            HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E"  
+                            Command="{Binding CloseMenuCommand}"
+                            Visibility="{Binding CloseMenuVisible,  Mode=TwoWay}">
                         <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25"/>
                     </Button>
-
-                    <Image Height="80" VerticalAlignment="Bottom"/>
                 </Grid>
-                <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ListViewMenu_SelectionChanged">
+                <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
                     <ListViewItem x:Name="ItemHome" Height="60">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="ViewDashboard" Height="25" Width="25" Margin="10"/>
@@ -153,8 +189,6 @@
                     </ListViewItem>
                 </ListView>
             </StackPanel>
-        </Grid>-->
         </Grid>
-
     </Grid>
-</Window>
+ </Window>
