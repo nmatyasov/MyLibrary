@@ -6,6 +6,7 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:cmd ="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d ignore"
         xmlns:databinding="clr-namespace:BooksOrganizer.Converters"
@@ -15,7 +16,7 @@
         WindowStartupLocation="CenterScreen" 
         WindowStyle="None"
 
-        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
         WindowState="{Binding WindowState, Mode=TwoWay}">
 
     <Window.Resources>
@@ -44,7 +45,7 @@
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
-     <Style TargetType="ListBox">
+       <Style TargetType="ListBox">
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
@@ -53,8 +54,9 @@
                 </Setter.Value>
             </Setter>
         </Style>
-          
-        <DataTemplate x:Key="MyImagesItemTemplate">
+
+
+            <DataTemplate x:Key="MyImagesItemTemplate">
             <Grid Width="250" Height="350">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -87,7 +89,7 @@
 
     <Grid Background="#FFDEDEDE" >
 
-        <Grid Height="60" VerticalAlignment="Top" Background="#FF5C99D6">
+        <Grid Height="60" VerticalAlignment="Top" Background="#FF5C99D6" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeftButtonDown" >
                     <cmd:EventToCommand Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True" />
@@ -102,25 +104,35 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                  <materialDesign:PackIcon Kind="Book" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
+            <StackPanel Grid.Column="0" Margin="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <materialDesign:PackIcon Kind="Book" Foreground="WhiteSmoke" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
 
                 <TextBox x:Name="SearchField"  materialDesign:HintAssist.Hint="SEARCH"  Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Foreground="White"  Width="600" FontSize="18" FontFamily="Arial"/>
-                    <Button x:Name="ClearSearchField"  HorizontalAlignment="Right" VerticalAlignment="Top" 
-                             Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" >
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" >
-                                <Setter Property="IsEnabled" Value="True" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Text, ElementName=SearchField}" Value="">
-                                        <Setter Property="IsEnabled" Value="False" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <materialDesign:PackIcon Kind="Magnify" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
-                    </Button>            
-              </StackPanel>
+                <Button x:Name="ClearSearchField"  HorizontalAlignment="Right" VerticalAlignment="Top" 
+                             Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" Command ="{Binding ResetFilterCommand}">
+
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" >
+                            <Setter Property="IsEnabled" Value="True" />
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <materialDesign:PackIcon Kind="WindowClose" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=SearchField}" Value="">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <materialDesign:PackIcon Kind="Magnify" Foreground="White" Width="20" Height="20" VerticalAlignment="Center" Margin="5"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
             <Button  Grid.Column="1" x:Name="ButtonMin" Foreground="White" Width="40" Height="40" Padding="3" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding MinimazeCommand}"  >
                 <materialDesign:PackIcon Kind="WindowMinimize" Height="25" Width="25"   />
             </Button>
@@ -133,7 +145,10 @@
         </Grid>
         <Grid x:Name="GridMain" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="70,60,0,0">
 
-            <ListBox x:Name="TvBox" ItemTemplate="{StaticResource MyImagesItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding SourceCollection}"/>
+            <ListBox x:Name="TvBox" ItemTemplate="{StaticResource MyImagesItemTemplate}" 
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                     ItemsSource="{Binding SourceCollection}"
+                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"/>
         </Grid>
         <Grid x:Name="GridMenu" Width="70" HorizontalAlignment="Left" Background="#FF31577E">
             <Grid.Effect>
@@ -169,22 +184,41 @@
                             <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem x:Name="ItemCreate" Height="60">
+                    <ListViewItem x:Name="ItemCreate" Height="60" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseEnter" >
+                                <!-- Execute a method called 'SomeMethod' defined in the view model -->
+                                <i:InvokeCommandAction Command="{Binding ShowDetailBookCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Pencil" Height="25" Width="25" Margin="10"/>
                             <TextBlock Text="Create" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem Height="60">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseEnter" >
+                                <!-- Execute a method called 'SomeMethod' defined in the view model -->
+                                <i:InvokeCommandAction Command="{Binding SearchBookCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Ticket" Height="25" Width="25" Margin="10"/>
+                            <materialDesign:PackIcon Kind="AccountSearch" Height="25" Width="25" Margin="10"/>
                             <TextBlock Text="Tickets" VerticalAlignment="Center"  Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="60">
+                    <ListViewItem Height="60" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseEnter" >
+                                <!-- Execute a method called 'SomeMethod' defined in the view model -->
+                                <i:InvokeCommandAction Command="{Binding SettingsCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Message" Height="25" Width="25" Margin="10"/>
-                            <TextBlock Text="Messages" VerticalAlignment="Center"  Margin="20 10"/>
+                            <materialDesign:PackIcon Kind="Settings" Height="25" Width="25" Margin="10"/>
+                            <TextBlock Text="Settings" VerticalAlignment="Center"  Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
                 </ListView>

@@ -25,6 +25,8 @@ namespace BooksOrganizer.ViewModel
     {
         private readonly IDataService _dataService;
         private CollectionViewSource filtredCollection;
+        private readonly IFrameNavigationService _navigationService;
+        private readonly IDialogService _dialogService;
 
 
         #region MVVMLight property
@@ -316,6 +318,40 @@ namespace BooksOrganizer.ViewModel
             }
         }
 
+
+        /// <summary>
+        /// The <see cref="SelectedItem" /> property's name.
+        /// </summary>
+        public const string SelectedItemPropertyName = "SelectedItem";
+
+        private Book _selectedItem ;
+
+        /// <summary>
+        /// Sets and gets the SelectedItem property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property's value is broadcasted by the MessengerInstance when it changes.
+        /// </summary>
+        public Book SelectedItem
+        {
+            get
+            {
+                return _selectedItem;
+            }
+
+            set
+            {
+                if (_selectedItem == value)
+                {
+                    return;
+                }
+
+                var oldValue = _selectedItem;
+                _selectedItem = value;
+                RaisePropertyChanged(() => SelectedItem, oldValue, value, true);
+            }
+        }
+
+
         #endregion
 
 
@@ -325,15 +361,24 @@ namespace BooksOrganizer.ViewModel
         public RelayCommand ResizeCommand { get; private set; }
         public RelayCommand OpenMenuCommand { get; private set; }
         public RelayCommand CloseMenuCommand { get; private set; }
+        public RelayCommand ResetFilterCommand { get; private set; }
+        public RelayCommand ShowDetailBookCommand { get; private set; }
+        public RelayCommand SearchBookCommand { get; private set; }
+
+        public RelayCommand SettingsCommand { get; private set; }
         #endregion
 
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService)
+        public MainViewModel(IDataService dataService, 
+                             IDialogService dialogService,
+                             IFrameNavigationService navigationService)
         {
             _dataService = dataService;
+            _navigationService = navigationService;
+            _dialogService = dialogService;
             BookList = new ObservableCollection<Book>();
             _dataService.GetData(
                 (items, error) =>
@@ -359,11 +404,35 @@ namespace BooksOrganizer.ViewModel
             ResizeCommand = new RelayCommand(onResizeCommand);
             OpenMenuCommand = new RelayCommand(onOpenMenuCommand);
             CloseMenuCommand = new RelayCommand(onCloseMenuCommand);
+            ResetFilterCommand = new RelayCommand(onResetFilterCommand);
+            ShowDetailBookCommand = new RelayCommand(onShowDetailBookCommand);
+            SearchBookCommand = new RelayCommand(onSearchBookCommand);
+            SettingsCommand = new RelayCommand(onSettingsCommand);
 
             filtredCollection = new CollectionViewSource();
             filtredCollection.Source = BookList;
             filtredCollection.Filter += filterCollection_Filter;
    
+        }
+        #region exec command
+        private void onSettingsCommand()
+        {
+            _navigationService.NavigateTo("SettingsPage");
+        }
+
+        private void onSearchBookCommand()
+        {
+            _navigationService.NavigateTo("SearchPage");
+        }
+
+        private void onShowDetailBookCommand()
+        {
+            _navigationService.NavigateTo("DetailPage", SelectedItem);
+        }
+
+        private void onResetFilterCommand()
+        {
+            FilterText = String.Empty;
         }
 
         private void onCloseMenuCommand()
@@ -380,6 +449,7 @@ namespace BooksOrganizer.ViewModel
 
         private RelayCommand<MouseButtonEventArgs> onMouseDownCommand;
 
+
         /// <summary>
         /// Gets the MouseDownCommand.
         /// </summary>
@@ -391,6 +461,7 @@ namespace BooksOrganizer.ViewModel
                     ?? (onMouseDownCommand = new RelayCommand<MouseButtonEventArgs>(ExecuteMouseDownCommand));
             }
         }
+    
 
         private void ExecuteMouseDownCommand(MouseButtonEventArgs e)
         {
@@ -445,7 +516,7 @@ namespace BooksOrganizer.ViewModel
             }
         }
 
-
+        #endregion
 
 
 

@@ -27,5 +27,7 @@ namespace BooksOrganizer
             InitializeComponent();
             Closing += (s, e) => ViewModelLocator.Cleanup();
         }
+
+
     }
 }

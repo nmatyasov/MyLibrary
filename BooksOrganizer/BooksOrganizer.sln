@@ -5,12 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksOrganizer", "BooksOrganizer\BooksOrganizer.csproj", "{CCC17941-FEA9-4160-BAB0-F3CDAF181359}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2DB6FE8F-98A8-42B2-B39D-EF4346464D88}"
-	ProjectSection(SolutionItems) = preProject
-		BooksOrganizer\Converters\ByteArrayToBitmapImageConverter.cs = BooksOrganizer\Converters\ByteArrayToBitmapImageConverter.cs
-		BooksOrganizer\Converters\Utils.cs = BooksOrganizer\Converters\Utils.cs
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
