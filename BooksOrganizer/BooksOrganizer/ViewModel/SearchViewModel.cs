@@ -14,22 +14,22 @@ namespace BooksOrganizer.ViewModel
     /// </summary>
     public class SearchViewModel : ViewModelBase
     {
-        public ObservableCollection<DataListItem> files { get; private set; }
+     //   public ObservableCollection<DataListItem> files { get; private set; }
 
-        private object _filesLock = new object();
-        private IFileService _fileService;
+     //   private object _filesLock = new object();
+     //   private IFileService _fileService;
 
         /// <summary>
         /// Initializes a new instance of the SearchViewModel class.
         /// </summary>
-        public SearchViewModel(IFileService fileService)
+        public SearchViewModel()
         {
 
-            files = new ObservableCollection<DataListItem>();
+           /* files = new ObservableCollection<DataListItem>();
             Messenger.Default.Register<DataListItem>(this, (item) => { files.Add(item); });
             BindingOperations.EnableCollectionSynchronization(files, _filesLock);
 
-            _fileService = fileService;
+            _fileService = fileService;*/
         }
     }
 }

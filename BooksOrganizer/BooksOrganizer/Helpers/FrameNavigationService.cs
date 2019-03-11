@@ -10,14 +10,17 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace BooksOrganizer.Helpers
 {
-    public class NavigationService : IFrameNavigationService, INotifyPropertyChanged
+    public class NavigationService : INavigationService, INotifyPropertyChanged
     {
         private readonly Dictionary<string, Uri> _pagesByKey;
         private readonly List<string> _historic;
+        private Frame _mainFrame;
 
+        public event NavigatingCancelEventHandler Navigating;
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationService"/> class.
         /// </summary>
@@ -52,10 +55,10 @@ namespace BooksOrganizer.Helpers
         /// </summary>
         public void GoBack()
         {
-            if (_historic.Count > 1)
+            if (EnsureMainFrame()
+                && _mainFrame.CanGoBack)
             {
-                _historic.RemoveAt(_historic.Count - 1);
-                NavigateTo(_historic.Last(), null);
+                _mainFrame.GoBack();
             }
         }
 
@@ -66,60 +69,56 @@ namespace BooksOrganizer.Helpers
         /// <param name="pageKey">
         /// The page key.
         /// </param>
-        public void NavigateTo(string pageKey)
+        public void NavigateTo(Uri pageUri)
         {
-            NavigateTo(pageKey, null);
+            if (EnsureMainFrame())
+            {
+                _mainFrame.Navigate(pageUri);
+            }
         }
 
-        /// <summary>
-        /// The navigate to.
-        /// </summary>
-        /// <param name="pageKey">
-        /// The page key.
-        /// </param>
-        /// <param name="parameter">
-        /// The parameter.
-        /// </param>
-        public virtual void NavigateTo(string pageKey, object parameter)
+
+
+        public void NavigateTo(Uri pageUri, object parameter)
         {
-            lock (_pagesByKey)
+            if (EnsureMainFrame())
             {
-                if (!_pagesByKey.ContainsKey(pageKey))
-                {
-                    throw new ArgumentException(string.Format("No such page: {0}. Did you forget to call NavigationService.Configure?", pageKey), "pageKey");
-                }
+                _mainFrame.Navigate(pageUri);
 
-                var frame = GetDescendantFromName(Application.Current.MainWindow, "ContentFrame") as Frame;
-
-                // Set the frame source, which initiates navigation
-                if (frame != null)
-                {
-                    frame.Source = _pagesByKey[pageKey];
-                }
                 Parameter = parameter;
-                _historic.Add(pageKey);
-                CurrentPageKey = pageKey;
             }
         }
 
-        /// <summary>
-        /// Configures the specified key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="pageType">Type of the page.</param>
-        public void Configure(string key, Uri pageType)
+
+
+        private bool EnsureMainFrame()
         {
-            lock (_pagesByKey)
+            if (_mainFrame != null)
             {
-                if (_pagesByKey.ContainsKey(key))                {
-                    _pagesByKey[key] = pageType;
-                }
-                else
-                {
-                    _pagesByKey.Add(key, pageType);
-                }
+                return true;
             }
+
+            //_mainFrame = Application.Current.MainWindow.FindName("MainFrameDS") as Frame;
+            // used this link:  https://stackoverflow.com/questions/2216917/wpf-equivalent-to-silverlight-rootvisual
+            _mainFrame = LogicalTreeHelper.FindLogicalNode(Application.Current.MainWindow, "ContentFrame") as Frame;
+
+            if (_mainFrame != null)
+            {
+                // Could be null if the app runs inside a design tool
+                _mainFrame.Navigating += (s, e) =>
+                {
+                    if (Navigating != null)
+                    {
+                        Navigating(s, e);
+                    }
+                };
+                return true;
+            }
+            return false;
         }
+
+
+
 
         /// <summary>
         /// Gets the name of the descendant from.
@@ -153,7 +152,6 @@ namespace BooksOrganizer.Helpers
                     }
                 }
             }
-
             return null;
         }
 

@@ -28,16 +28,17 @@ namespace BooksOrganizer.ViewModel
     public class ViewModelLocator
     {
 
-        public const string MainPageKey = "MainPage";
-        public const string DetailPageKey = "DetailPage";
-        public const string SettingsPageKey = "SettingsPage";
-        public const string SearchPageKey = "SearchPage";
-        public const string ListPageKey = "ListPage";
+        public static readonly Uri DetailPageUri = new Uri("../View/DetailView.xaml", UriKind.Relative);
+        public static readonly Uri SettingsPageUri = new Uri("../View/SettingsView.xaml", UriKind.Relative);
+        public static readonly Uri SearchPageUri = new Uri("../View/SearchView.xaml", UriKind.Relative);
+        public static readonly Uri ListPageUri = new Uri("../View/ListView.xaml", UriKind.Relative);
+
+
         static ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            SetupNavigation();
+
 
             if (ViewModelBase.IsInDesignModeStatic)
             {
@@ -55,18 +56,9 @@ namespace BooksOrganizer.ViewModel
             SimpleIoc.Default.Register<SearchViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<ListViewModel>();
+            SimpleIoc.Default.Register<INavigationService, NavigationService>();
         }
 
-        private static void SetupNavigation()
-        {
-            var nav = new NavigationService();
-            nav.Configure(DetailPageKey, new Uri("../Views/DetailView.xaml", UriKind.Relative));
-            nav.Configure(SettingsPageKey, new Uri("../Views/SettingsView.xaml", UriKind.Relative));
-            nav.Configure(SearchPageKey, new Uri("../Views/SearchView.xaml", UriKind.Relative));
-            nav.Configure(SearchPageKey, new Uri("../Views/ListView.xaml", UriKind.Relative));
-
-            SimpleIoc.Default.Register<IFrameNavigationService>(() => nav);
-        }
 
         /// <summary>
         /// Gets the Main property.
@@ -138,7 +130,7 @@ namespace BooksOrganizer.ViewModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
-        public ListViewModel ListPropertyName
+        public ListViewModel ListViewModel
         {
             get
             {

@@ -203,6 +203,7 @@
     <Compile Include="Helpers\IDialogService.cs" />
     <Compile Include="Helpers\IFrameNavigationService.cs" />
     <Compile Include="Helpers\FrameNavigationService.cs" />
+    <Compile Include="Helpers\INavigationService.cs" />
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\ShutdownService.cs" />
     <Compile Include="Migrations\Configuration.cs" />
