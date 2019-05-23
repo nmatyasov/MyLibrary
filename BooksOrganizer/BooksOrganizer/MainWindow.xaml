@@ -103,7 +103,7 @@
                 <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
                     <ListViewItem x:Name="ItemHome" Height="60">
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseEnter" >
+                            <i:EventTrigger EventName="MouseClick" >
                                 <!-- Execute a method called 'SomeMethod' defined in the view model -->
                                 <i:InvokeCommandAction Command="{Binding ChangeToListPage}" />
                             </i:EventTrigger>
@@ -116,7 +116,7 @@
                     </ListViewItem>
                     <ListViewItem x:Name="ItemCreate" Height="60" >
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseEnter" >
+                            <i:EventTrigger EventName="MouseClick" >
                                 <!-- Execute a method called 'SomeMethod' defined in the view model -->
                                 <i:InvokeCommandAction Command="{Binding ChangeToNewBookPage}" />
                             </i:EventTrigger>
@@ -129,7 +129,7 @@
                     </ListViewItem>
                     <ListViewItem Height="60">
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseEnter" >
+                            <i:EventTrigger EventName="MouseClick" >
                                 <!-- Execute a method called 'SomeMethod' defined in the view model -->
                                 <i:InvokeCommandAction Command="{Binding ChangeToSearchPage}" />
                             </i:EventTrigger>
@@ -141,7 +141,7 @@
                     </ListViewItem>
                     <ListViewItem Height="60" >
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseEnter" >
+                            <i:EventTrigger EventName="MouseClick" >
                                 <!-- Execute a method called 'SomeMethod' defined in the view model -->
                                 <i:InvokeCommandAction Command="{Binding ChangeToSettingsPage}" />
                             </i:EventTrigger>

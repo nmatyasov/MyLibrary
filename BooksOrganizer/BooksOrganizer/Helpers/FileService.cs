@@ -73,7 +73,7 @@ namespace BooksOrganizer.Model
                     Parallel.ForEach(files, new ParallelOptions() { MaxDegreeOfParallelism = 1 }, (file) =>
                     {
                         var item = new DataListItem(file);
-                        Messenger.Default.Send<DataListItem>(item);
+                        Messenger.Default.Send(item);
                        // this.files.Add(item);
                     });
                 });

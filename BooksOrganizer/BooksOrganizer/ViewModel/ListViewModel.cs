@@ -72,7 +72,7 @@ namespace BooksOrganizer.ViewModel
         /// </summary>
         public const string NamePropertyName = "Name";
 
-        private string _name = String.Empty;
+        private string _name;
 
         /// <summary>
         /// Sets and gets the Name property.
@@ -105,7 +105,7 @@ namespace BooksOrganizer.ViewModel
         /// </summary>
         public const string AuthorPropertyName = "Author";
 
-        private string _author = String.Empty;
+        private string _author;
 
         /// <summary>
         /// Sets and gets the Author property.
@@ -137,7 +137,7 @@ namespace BooksOrganizer.ViewModel
         /// </summary>
         public const string CoverPropertyName = "Cover";
 
-        private byte[] _cover = null;
+        private byte[] _cover;
 
         /// <summary>
         /// Sets and gets the Cover property.
@@ -169,7 +169,7 @@ namespace BooksOrganizer.ViewModel
         /// </summary>
         public const string FilterTextPropertyName = "FilterText";
 
-        private string _filterText = String.Empty;
+        private string _filterText;
 
         /// <summary>
         /// Sets and gets the FilterText property.
