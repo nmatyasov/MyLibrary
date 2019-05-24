@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using BooksOrganizer.Model;
+using GalaSoft.MvvmLight;
 
 namespace BooksOrganizer.ViewModel
 {
@@ -16,5 +17,7 @@ namespace BooksOrganizer.ViewModel
         public DetailViewModel()
         {
         }
+
+        public Book SelectedBook { get; internal set; }
     }
 }

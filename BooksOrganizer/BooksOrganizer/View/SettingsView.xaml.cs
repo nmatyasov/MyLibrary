@@ -6,7 +6,7 @@ namespace BooksOrganizer.View
     /// <summary>
     /// Description for SettingsView.
     /// </summary>
-    public partial class SettingsView : Page
+    public partial class SettingsView : Window
     {
         /// <summary>
         /// Initializes a new instance of the SettingsView class.

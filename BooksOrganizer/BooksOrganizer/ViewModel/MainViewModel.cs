@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Windows;
 using MaterialDesignThemes.Wpf;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace BooksOrganizer.ViewModel
 {
@@ -24,41 +25,181 @@ namespace BooksOrganizer.ViewModel
     public class MainViewModel : ViewModelBase
     {
 
-     //   private readonly IFrameNavigationService _navigationService;
+        private readonly IDataService _dataService;
+        private CollectionViewSource _filtredCollection;
         private readonly IDialogService _dialogService;
 
 
         #region MVVMLight property
-
-
-
         /// <summary>
-        /// The <see cref="WindowState" /> property's name.
+        /// The <see cref="BookList" /> property's name.
         /// </summary>
-        public const string WindowStatePropertyName = "WindowState";
+        public const string BookListPropertyName = "BookList";
 
-        private WindowState _windowState = WindowState.Normal;
+        private ObservableCollection<Book> _booklist;
 
         /// <summary>
-        /// Sets and gets the WindowState property.
+        /// Sets and gets the BookList property.
         /// Changes to that property's value raise the PropertyChanged event. 
         /// This property's value is broadcasted by the MessengerInstance when it changes.
         /// </summary>
-        public WindowState WindowState
+        public ObservableCollection<Book> BookList
         {
             get
             {
-                return _windowState;
+                return _booklist;
             }
+
             set
             {
-                Set(() => WindowState, ref _windowState, value, true);
+                if (_booklist == value)
+                {
+                    return;
+                }
+
+                var oldValue = _booklist;
+                _booklist = value;
+                RaisePropertyChanged(() => BookList, oldValue, value, true);
+            }
+        }
+
+        /// <summary>
+        /// The <see cref="Name" /> property's name.
+        /// </summary>
+        public const string NamePropertyName = "Name";
+
+        private string _name;
+
+        /// <summary>
+        /// Sets and gets the Name property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property's value is broadcasted by the MessengerInstance when it changes.
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+
+            set
+            {
+                if (_name == value)
+                {
+                    return;
+                }
+
+                var oldValue = _name;
+                _name = value;
+                RaisePropertyChanged(() => Name, oldValue, value, true);
             }
         }
 
 
+        /// <summary>
+        /// The <see cref="Author" /> property's name.
+        /// </summary>
+        public const string AuthorPropertyName = "Author";
 
- 
+        private string _author;
+
+        /// <summary>
+        /// Sets and gets the Author property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property's value is broadcasted by the MessengerInstance when it changes.
+        /// </summary>
+        public string Author
+        {
+            get
+            {
+                return _author;
+            }
+
+            set
+            {
+                if (_author == value)
+                {
+                    return;
+                }
+
+                var oldValue = _author;
+                _author = value;
+                RaisePropertyChanged(() => Author, oldValue, value, true);
+            }
+        }
+
+        /// <summary>
+        /// The <see cref="Cover" /> property's name.
+        /// </summary>
+        public const string CoverPropertyName = "Cover";
+
+        private byte[] _cover;
+
+        /// <summary>
+        /// Sets and gets the Cover property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property's value is broadcasted by the MessengerInstance when it changes.
+        /// </summary>
+        public byte[] Cover
+        {
+            get
+            {
+                return _cover;
+            }
+
+            set
+            {
+                if (_cover == value)
+                {
+                    return;
+                }
+
+                var oldValue = _cover;
+                _cover = value;
+                RaisePropertyChanged(() => Cover, oldValue, value, true);
+            }
+        }
+
+
+        /// The <see cref="FilterText" /> property's name.
+        /// </summary>
+        public const string FilterTextPropertyName = "FilterText";
+
+        private string _filterText = String.Empty;
+
+        /// <summary>
+        /// Sets and gets the FilterText property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property's value is broadcasted by the MessengerInstance when it changes.
+        /// </summary>
+        public string FilterText
+        {
+            get
+            {
+                return _filterText;
+            }
+
+            set
+            {
+                if (_filterText == value)
+                {
+                    return;
+                }
+
+                var oldValue = _filterText;
+                _filterText = value;
+                this._filtredCollection.View.Refresh();
+                RaisePropertyChanged(() => FilterText, oldValue, value, true);
+            }
+        }
+
+        public ICollectionView SourceCollection
+        {
+            get
+            {
+                return this._filtredCollection.View;
+            }
+        }
 
 
         /// <summary>
@@ -153,42 +294,74 @@ namespace BooksOrganizer.ViewModel
 
 
         /// <summary>
-        /// The <see cref="FrameUri" /> property's name.
+        /// The <see cref="SelectedItem" /> property's name.
         /// </summary>
-        public const string FrameUriPropertyName = "FrameUri";
+        public const string SelectedItemPropertyName = "SelectedItem";
 
-        private Uri _frameUri;
+        private Book _selectedItem;
 
         /// <summary>
-        /// Sets and gets the FrameUri property.
+        /// Sets and gets the SelectedItem property.
         /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property's value is broadcasted by the MessengerInstance when it changes.
         /// </summary>
-        public Uri FrameUri
+        public Book SelectedItem
         {
-            get
-            {
-                return _frameUri;
-            }
+            get => _selectedItem;
+
             set
             {
-                Set(FrameUriPropertyName, ref _frameUri, value);
-                System.Diagnostics.Debug.WriteLine(_frameUri.ToString(), "_frameUri");
-                System.Diagnostics.Debug.WriteLine(FrameUri.ToString(), "FrameUri");
+                if (_selectedItem == value)
+                {
+                    return;
+                }
+
+                var oldValue = _selectedItem;
+                _selectedItem = value;
+                RaisePropertyChanged(() => SelectedItem, oldValue, value, true);
             }
         }
 
-        /// <summary>
 
+
+
+        /// <summary>
+        /// The <see cref="WindowState" /> property's name.
+        /// </summary>
+        public const string WindowStatePropertyName = "WindowState";
+
+        private WindowState _windowState = WindowState.Normal;
+
+        /// <summary>
+        /// Sets and gets the WindowState property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// This property's value is broadcasted by the MessengerInstance when it changes.
+        /// </summary>
+        public WindowState WindowState
+        {
+            get
+            {
+                return _windowState;
+            }
+            set
+            {
+                Set(() => WindowState, ref _windowState, value, true);
+            }
+        }
         #endregion
 
 
 
         #region RelayComand
         public RelayCommand ShutdownCommand { get; private set; }
-
+        public RelayCommand MinimazeCommand { get; private set; }
+        public RelayCommand ResizeCommand { get; private set; }
         public RelayCommand OpenMenuCommand { get; private set; }
         public RelayCommand CloseMenuCommand { get; private set; }
-
+        public RelayCommand ResetFilterCommand { get; private set; }
+        public RelayCommand DetailBookCommand { get; private set; }
+        public RelayCommand SearchBookCommand { get; private set; }
+        public RelayCommand SettingsCommand { get; private set; }
         #endregion
 
 
@@ -196,29 +369,64 @@ namespace BooksOrganizer.ViewModel
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel(IDataService dataService, 
-                             IDialogService dialogService/*,
-                             IFrameNavigationService navigationService*/)
+                             IDialogService dialogService)
         {
-           // _navigationService = navigationService;
+            _dataService = dataService;
+            _dialogService = dialogService;
+            BookList = new ObservableCollection<Book>();
+            _dataService.GetData(
+                (items, error) =>
+                {
+                    if (error != null)
+                    {
+                        // Report error here
+                        return;
+                    }
+
+                    BookList = items;
+                });
+
             _dialogService = dialogService;
 
-            FrameUri = ViewModelLocator.ListPageUri;
-
-
+  
             if (IsInDesignMode)  
             {  
                 // Code runs in Blend --> create design time data.  
-            }  
-         
+            }
+
+
 
             ShutdownCommand = new RelayCommand(ShutdownService.RequestShutdown);
+            MinimazeCommand = new RelayCommand(onMinimazeCommand);
+            ResizeCommand = new RelayCommand(OnResizeCommand);
             OpenMenuCommand = new RelayCommand(onOpenMenuCommand);
             CloseMenuCommand = new RelayCommand(onCloseMenuCommand);
+            ResetFilterCommand = new RelayCommand(OnResetFilterCommand);
+            DetailBookCommand = new RelayCommand(() =>
+                                                         Messenger.Default.Send(
+                                                         new OpenWindowMessage() { Type = WindowType.wDetailDialog, Argument = SelectedItem }));
+            SearchBookCommand = new RelayCommand(() =>
+                                                         Messenger.Default.Send(
+                                                         new OpenWindowMessage() { Type = WindowType.wSearchDialog }));
+            SettingsCommand = new RelayCommand(() =>
+                                                         Messenger.Default.Send(
+                                                         new OpenWindowMessage() { Type = WindowType.wSettingDialog }));
+
+            _filtredCollection = new CollectionViewSource();
+            _filtredCollection.Source = BookList;
+            _filtredCollection.Filter += FilterCollection_Filter;
+
+
 
         }
         #region exec command
 
 
+
+        private void onMinimazeCommand()
+        {
+            WindowState = WindowState.Minimized;
+        }
 
         private void onCloseMenuCommand()
         {
@@ -232,101 +440,75 @@ namespace BooksOrganizer.ViewModel
             OpenMenuVisible = Visibility.Collapsed;
         }
 
-        private Boolean CheckUri(Uri _frameUriToCheck, Uri _vmUri)
-        {
-            string StringUriToCheck = _frameUriToCheck.ToString();
-            string StringUriVM = _vmUri.ToString();
-            System.Diagnostics.Debug.WriteLine(StringUriToCheck, "StringUriToCheck");
-            System.Diagnostics.Debug.WriteLine(StringUriVM, "StringUriVM");
 
-            if (StringUriVM.Contains(StringUriToCheck))
-            { return false; }
+
+
+
+        private RelayCommand<MouseButtonEventArgs> onMouseDownCommand;
+        /// <summary>
+        /// Gets the MouseDownCommand.
+        /// </summary>
+        public RelayCommand<MouseButtonEventArgs> MouseDownCommand
+        {
+            get
+            {
+                return onMouseDownCommand
+                    ?? (onMouseDownCommand = new RelayCommand<MouseButtonEventArgs>(ExecuteMouseDownCommand));
+            }
+        }
+
+
+        private void ExecuteMouseDownCommand(MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                if (e.ClickCount == 2)
+                {
+                    OnResizeCommand();
+                }
+                else
+                {
+                    DragMoveService.RequestDragMove();
+                }
+        }
+
+        private void OnResizeCommand()
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                IconKind = PackIconKind.WindowMaximize;
+                WindowState = WindowState.Normal;
+            }
             else
-            { return true; }
-        }
-
-
-        private RelayCommand _changeToListPage;
-
-        /// <summary>
-        /// Gets the ChangeToIntroPage.
-        /// </summary>
-        public RelayCommand ChangeToListPage
-        {
-            get
             {
-                return _changeToListPage
-                    ?? (_changeToListPage = new RelayCommand(
-                    () =>
-                    {
-                        FrameUri = ViewModelLocator.ListPageUri;
-                    },
-                    () => CheckUri(FrameUri, ViewModelLocator.ListPageUri)));
+                IconKind = PackIconKind.WindowRestore;
+                WindowState = WindowState.Maximized;
             }
         }
 
-
-        private RelayCommand _changeToSearchPage;
-
-        /// <summary>
-        /// Gets the ChangeToIntroPage.
-        /// </summary>
-        public RelayCommand ChangeToSearchPage
+        private void OnResetFilterCommand()
         {
-            get
+            FilterText = String.Empty;
+        }
+
+        private void FilterCollection_Filter(object sender, FilterEventArgs e)
+        {
+            if (string.IsNullOrEmpty(FilterText))
             {
-                return _changeToSearchPage
-                    ?? (_changeToSearchPage = new RelayCommand(
-                    () =>
-                    {
-                        FrameUri = ViewModelLocator.SearchPageUri;
-                    },
-                    () => CheckUri(FrameUri, ViewModelLocator.SearchPageUri)));           
+                e.Accepted = true;
+                return;
+            }
+
+            Book usr = e.Item as Book;
+            if (usr.Name.ToUpper().Contains(FilterText.ToUpper()))
+            {
+                e.Accepted = true;
+            }
+            else
+            {
+                e.Accepted = false;
             }
         }
 
-
-
-        private RelayCommand _changeToNewBookPage;
-
-        /// <summary>
-        /// Gets the ChangeToIntroPage.
-        /// </summary>
-        public RelayCommand ChangeToNewBookPage
-        {
-            get
-            {
-                return _changeToNewBookPage
-                    ?? (_changeToNewBookPage = new RelayCommand(
-                    () =>
-                    {
-                        FrameUri = ViewModelLocator.DetailPageUri;
-                    },
-                    () => CheckUri(FrameUri, ViewModelLocator.DetailPageUri)));
-            }
-        }
-
-
-
-
-        private RelayCommand _changeToSettingsPage;
-
-        /// <summary>
-        /// Gets the ChangeToIntroPage.
-        /// </summary>
-        public RelayCommand ChangeToSettingsPage
-        {
-            get
-            {
-                return _changeToSettingsPage
-                    ?? (_changeToSettingsPage = new RelayCommand(
-                    () =>
-                    {
-                        FrameUri = ViewModelLocator.SettingsPageUri;
-                    },
-                    () => CheckUri(FrameUri, ViewModelLocator.SettingsPageUri)));
-            }
-        }
 
         #endregion
 

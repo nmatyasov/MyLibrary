@@ -6,7 +6,7 @@ namespace BooksOrganizer.View
     /// <summary>
     /// Description for SearchView.
     /// </summary>
-    public partial class SearchView : Page
+    public partial class SearchView : Window
     {
         /// <summary>
         /// Initializes a new instance of the SearchView class.

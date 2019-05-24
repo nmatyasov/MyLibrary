@@ -28,12 +28,6 @@ namespace BooksOrganizer.ViewModel
     public class ViewModelLocator
     {
 
-        public static readonly Uri DetailPageUri = new Uri("../View/DetailView.xaml", UriKind.Relative);
-        public static readonly Uri SettingsPageUri = new Uri("../View/SettingsView.xaml", UriKind.Relative);
-        public static readonly Uri SearchPageUri = new Uri("../View/SearchView.xaml", UriKind.Relative);
-        public static readonly Uri ListPageUri = new Uri("../View/ListView.xaml", UriKind.Relative);
-
-
         static ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
@@ -55,8 +49,6 @@ namespace BooksOrganizer.ViewModel
             SimpleIoc.Default.Register<DetailViewModel>();
             SimpleIoc.Default.Register<SearchViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
-            SimpleIoc.Default.Register<ListViewModel>();
-            SimpleIoc.Default.Register<INavigationService, NavigationService>();
         }
 
 
@@ -76,67 +68,53 @@ namespace BooksOrganizer.ViewModel
 
 
 
-        /// <summary>
-        /// Gets the DetailViewModel property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public DetailViewModel DetailViewModel
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<DetailViewModel>();
-            }
-        }
+        ///// <summary>
+        ///// Gets the DetailViewModel property.
+        ///// </summary>
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+        //    "CA1822:MarkMembersAsStatic",
+        //    Justification = "This non-static member is needed for data binding purposes.")]
+        //public DetailViewModel DetailViewModel
+        //{
+        //    get
+        //    {
+        //        return ServiceLocator.Current.GetInstance<DetailViewModel>();
+        //    }
+        //}
 
 
 
 
-        /// <summary>
-        /// Gets the ViewModelPropertyName property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public SearchViewModel SearchViewModel
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<SearchViewModel>();
-            }
-        }
+        ///// <summary>
+        ///// Gets the ViewModelPropertyName property.
+        ///// </summary>
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+        //    "CA1822:MarkMembersAsStatic",
+        //    Justification = "This non-static member is needed for data binding purposes.")]
+        //public SearchViewModel SearchViewModel
+        //{
+        //    get
+        //    {
+        //        return ServiceLocator.Current.GetInstance<SearchViewModel>();
+        //    }
+        //}
 
 
-        /// <summary>
-        /// Gets the SettingsViewModel property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public SettingsViewModel SettingsViewModel
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<SettingsViewModel>();
-            }
-        }
+        ///// <summary>
+        ///// Gets the SettingsViewModel property.
+        ///// </summary>
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+        //    "CA1822:MarkMembersAsStatic",
+        //    Justification = "This non-static member is needed for data binding purposes.")]
+        //public SettingsViewModel SettingsViewModel
+        //{
+        //    get
+        //    {
+        //        return ServiceLocator.Current.GetInstance<SettingsViewModel>();
+        //    }
+        //}
 
  
-
-        /// <summary>
-        /// Gets the ListPropertyName property.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public ListViewModel ListViewModel
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<ListViewModel>();
-            }
-        }
 
         /// <summary>
         /// Cleans up all the resources.

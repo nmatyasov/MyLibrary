@@ -22,38 +22,52 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Indigo.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
             <databinding:ByteArrayToBitmapImageConverter x:Key="ByteArrayToBitmapImageConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
 
             <Storyboard x:Key="OpenMenu">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
-                <EasingDoubleKeyFrame KeyTime="0" Value="70"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200"/>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="CloseMenu">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
-                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="70"/>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="70"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="CloseMenu">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="70"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
 
-       <Style TargetType="ListBox">
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-          
+            <Style TargetType="ListBox">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <DataTemplate x:Key="MyImagesItemTemplate">
+                <Grid Width="250" Height="350">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                    </Grid.RowDefinitions>
+                    <Image Grid.Row="0" 
+                       Source="{Binding Cover,
+                                        Converter= {StaticResource ByteArrayToBitmapImageConverter},
+                                        Mode=OneWay}"/>
+                    <Label Grid.Row="1" Content="{Binding Name}" HorizontalAlignment="Center" />
+                    <Label Grid.Row="2" Content="{Binding Author}" HorizontalAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -70,8 +84,78 @@
 
 
     <Grid Background="#FFDEDEDE" >
-        <Grid x:Name="GridMain" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="70,0,0,0">
-            <Frame x:Name="ContentFrame" Source="{Binding FrameUri, Mode=TwoWay}" NavigationUIVisibility="Hidden" Content="(ListView.xaml)"   />
+        <Grid Height="60" VerticalAlignment="Top" Background="#FF5C99D6" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown" >
+                    <cmd:EventToCommand Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="1" ShadowDepth="1" Color="#FFACACAC"/>
+            </Grid.Effect>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Margin="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <materialDesign:PackIcon Kind="Book" Foreground="WhiteSmoke" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
+
+                <TextBox x:Name="SearchField"  materialDesign:HintAssist.Hint="SEARCH"  Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Foreground="White"  Width="600" FontSize="18" FontFamily="Arial"/>
+                <Button x:Name="ClearSearchField"  HorizontalAlignment="Right" VerticalAlignment="Top" 
+                             Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" Command ="{Binding ResetFilterCommand}">
+
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" >
+                            <Setter Property="IsEnabled" Value="True" />
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <materialDesign:PackIcon Kind="WindowClose" Foreground="White" Width="25" Height="25" VerticalAlignment="Center" Margin="5"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=SearchField}" Value="">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <materialDesign:PackIcon Kind="Magnify" Foreground="White" Width="20" Height="20" VerticalAlignment="Center" Margin="5"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+            <Button  Grid.Column="1" x:Name="ButtonMin" Foreground="White" Width="40" Height="40" Padding="3" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding MinimazeCommand}"  >
+                <materialDesign:PackIcon Kind="WindowMinimize" Height="25" Width="25"   />
+            </Button>
+            <Button  Grid.Column="2" x:Name="ButtonMax" Foreground="White" Width="40" Height="40" Padding="3" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding ResizeCommand}"  >
+                <materialDesign:PackIcon  Kind= "{Binding IconKind}" Height="25" Width="25"  />
+            </Button>
+            <Button  Grid.Column="3" x:Name="ButtonClose" Foreground="White" Width="40" Height="40" Padding="3" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding ShutdownCommand}"  >
+                <materialDesign:PackIcon Kind="WindowClose" Height="25" Width="25"  />
+            </Button>
+        </Grid>
+        <Grid x:Name="GridMain" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="70,60,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="36"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="TvBox" ItemTemplate="{StaticResource MyImagesItemTemplate}" 
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                     ItemsSource="{Binding SourceCollection}"
+                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}" Grid.ColumnSpan="2">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding DetailBookCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListBox>
+
+
+
         </Grid>
         <Grid x:Name="GridMenu" Width="70" HorizontalAlignment="Left" Background="#FF31577E">
             <Grid.Effect>
@@ -101,14 +185,14 @@
                     </Button>
                 </Grid>
                 <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
-                    <ListViewItem x:Name="ItemHome" Height="60">
+                    <ListViewItem x:Name="ItemHome" Height="60"  >
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseClick" >
+                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown" >
                                 <!-- Execute a method called 'SomeMethod' defined in the view model -->
-                                <i:InvokeCommandAction Command="{Binding ChangeToListPage}" />
+                                <i:InvokeCommandAction Command="{Binding DetailBookCommand}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                        
+
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="ViewDashboard" Height="25" Width="25" Margin="10"/>
                             <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10"/>
@@ -116,9 +200,9 @@
                     </ListViewItem>
                     <ListViewItem x:Name="ItemCreate" Height="60" >
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseClick" >
+                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown" >
                                 <!-- Execute a method called 'SomeMethod' defined in the view model -->
-                                <i:InvokeCommandAction Command="{Binding ChangeToNewBookPage}" />
+                                <i:InvokeCommandAction Command="{Binding DetailBookCommand}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
 
@@ -129,9 +213,9 @@
                     </ListViewItem>
                     <ListViewItem Height="60">
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseClick" >
+                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown" >
                                 <!-- Execute a method called 'SomeMethod' defined in the view model -->
-                                <i:InvokeCommandAction Command="{Binding ChangeToSearchPage}" />
+                                <i:InvokeCommandAction Command="{Binding SearchBookCommand}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <StackPanel Orientation="Horizontal">
@@ -141,9 +225,9 @@
                     </ListViewItem>
                     <ListViewItem Height="60" >
                         <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseClick" >
+                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown" >
                                 <!-- Execute a method called 'SomeMethod' defined in the view model -->
-                                <i:InvokeCommandAction Command="{Binding ChangeToSettingsPage}" />
+                                <i:InvokeCommandAction Command="{Binding SettingsCommand}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <StackPanel Orientation="Horizontal">
@@ -155,4 +239,4 @@
             </StackPanel>
         </Grid>
     </Grid>
- </Window>
+</Window>

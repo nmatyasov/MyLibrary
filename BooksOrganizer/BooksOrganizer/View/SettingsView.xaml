@@ -1,12 +1,40 @@
-﻿<Page x:Class="BooksOrganizer.View.SettingsView"
+﻿<Window x:Class="BooksOrganizer.View.SettingsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Height="600"
+        Width="800"
+        WindowStartupLocation="CenterScreen"
         DataContext="{Binding SettingsViewModel, Source={StaticResource Locator}}">
 
-    <Grid>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <materialDesign:ColorZone Background="#FF5C99D6" Mode="PrimaryMid" Grid.Row="0" VerticalAlignment="Stretch">
+            <TextBlock Text="Settings" Foreground="White"  VerticalAlignment="Center" Margin="20" FontSize="30"/>
+        </materialDesign:ColorZone>
+
+        <Button Grid.RowSpan="2" Margin="50 72" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
+                >
+            <materialDesign:PackIcon Kind="CloseBox"/>
+        </Button>
+        <Button Grid.RowSpan="2" Margin="0,70,130,0" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
+                >
+            <materialDesign:PackIcon Kind="ContentSave"/>
+        </Button>
     </Grid>
-</Page>
+</Window>
